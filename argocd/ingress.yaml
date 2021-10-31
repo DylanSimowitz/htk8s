@@ -1,19 +1,28 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd
-  annotations:
-    traefik.frontend.rule.type: PathPrefixStrip  
-    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+  # annotations:
+  # traefik.ingress.kubernetes.io/router.middlewares: argocd-argocd-stripprefix@kubernetescrd
 spec:
   rules:
-  - http:
-      paths:
-      - path: /argocd
-        backend:
-          serviceName: argocd-server
-          servicePort: http
+    - http:
+        paths:
+          - path: /argocd
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  name: http
   tls:
-   - secretName: argocd-secret    
+    - secretName: argocd-secret
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: argocd-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /argocd/
