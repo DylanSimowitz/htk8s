@@ -1,18 +1,18 @@
-![test](https://github.com/fabito/htk8s/workflows/test/badge.svg)
+![test](https://github.com/DylanSimowitz/htk8s/workflows/test/badge.svg)
 
 # HTPC powered by k3s
 
-![htk8s diagrams](https://docs.google.com/drawings/d/e/2PACX-1vSsQfsfgHiHi0l-1w6pZhCYX-xz2xJNVwMrnKclkqYdEd6dIGJY9soY2lgtm1gyOnNSTYRbYkqvYCWU/pub?w=1373&amp;h=612)
+![htk8s diagrams](https://docs.google.com/drawings/d/e/2PACX-1vSsQfsfgHiHi0l-1w6pZhCYX-xz2xJNVwMrnKclkqYdEd6dIGJY9soY2lgtm1gyOnNSTYRbYkqvYCWU/pub?w=1373&h=612)
 
 This is my current [HTPC](https://en.wikipedia.org/wiki/Home_theater_PC) setup. It runs on [k3s](https://k3s.io/) - a lightweight and easy to install Kubernetes distribution.
 It includes the following applications:
 
-* [Sonarr](https://sonarr.tv/) for tv shows
-* [Radarr](https://radarr.video/) for movies
-* [Bazarr](https://github.com/morpheus65535/bazarr) for subtitles
-* Transmission for torrents
-* [Jackett](https://github.com/Jackett/Jackett) 
-* [Emby](https://emby.media/)
+- [Sonarr](https://sonarr.tv/) for tv shows
+- [Radarr](https://radarr.video/) for movies
+- [Bazarr](https://github.com/morpheus65535/bazarr) for subtitles
+- Transmission for torrents
+- [Jackett](https://github.com/Jackett/Jackett)
+- [Emby](https://emby.media/)
 
 Applications state (settings / db) and media files are stored in a shared volume of type `hostPath`. It does not use PVC and currently only works if the whole `htpc` namespace is deployed in the same node.
 
@@ -22,20 +22,19 @@ Applications state (settings / db) and media files are stored in a shared volume
 
 ```bash
 # for x86_64
-kubectl apply -f https://raw.githubusercontent.com/fabito/htk8s/v0.1/install_x86_64.yaml
+kubectl apply -f https://raw.githubusercontent.com/DylanSimowitz/htk8s/v0.1/install_x86_64.yaml
 
 # for raspberry pi (ARM)
-kubectl apply -f https://raw.githubusercontent.com/fabito/htk8s/v0.1/install_armhf.yaml
+kubectl apply -f https://raw.githubusercontent.com/DylanSimowitz/htk8s/v0.1/install_armhf.yaml
 ```
 
 ### The Gitops way
 
 ![argocd htpc application](https://drive.google.com/uc?id=1KI_7GVcP7QFWhQEiqS9Q4azE7-gpso2M)
 
-
 ```bash
 # x86_64 only
-kubectl apply -f https://raw.githubusercontent.com/fabito/htk8s/v0.1/install_argocd.yaml
+kubectl apply -f https://raw.githubusercontent.com/DylanSimowitz/htk8s/v0.1/install_argocd.yaml
 ```
 
 This alternate manifest will install [Argo CD](https://github.com/argoproj/argo-cd) along with the [htpc application](argocd/application.yaml). Then it will monitor this repo for changes and apply them to the cluster accordingly (more specifically the `overlays/x86`overlay).
@@ -88,14 +87,14 @@ replicaset.apps/transmission-5f7fdc6cb5   1         1         1       24h
 
 You should also be able to reach each component's ui using the links below. Don't forget to replace `localhost` by the IP or the server name running k3s.
 
-|App|URI
-|---|---
-|radarr|http://localhost/radarr
-|sonarr|http://localhost/sonarr
-|bazarr|http://localhost/bazarr
-|jacket|http://localhost/jackett
-|transmission|http://localhost/transmission
-|emby|http://localhost/
+| App          | URI                           |
+| ------------ | ----------------------------- |
+| radarr       | http://localhost/radarr       |
+| sonarr       | http://localhost/sonarr       |
+| bazarr       | http://localhost/bazarr       |
+| jacket       | http://localhost/jackett      |
+| transmission | http://localhost/transmission |
+| emby         | http://localhost/             |
 
 Check the [ingress.yaml](base/ingress.yaml) for more details.
 
